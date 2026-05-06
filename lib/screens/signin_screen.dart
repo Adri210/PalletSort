@@ -1,260 +1,88 @@
 import 'package:flutter/material.dart';
-import 'package:icons_plus/icons_plus.dart';
-import 'package:palletsort/screens/signup_screen.dart';
-import 'package:palletsort/widgets/custom_scaffold.dart';
+import 'package:palletsort/widgets/welcome_button.dart';
 
-import '../theme/theme.dart';
+// Substitua GoogleFonts por fonte local ou use o pacote correto
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
 
-  @override
-  State<SignInScreen> createState() => _SignInScreenState();
-}
-
-class _SignInScreenState extends State<SignInScreen> {
-  final _formSignInKey = GlobalKey<FormState>();
-  bool rememberPassword = true;
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      child: Column(
+    final size = MediaQuery.of(context).size;
+
+    return Scaffold(
+      body: Stack(
         children: [
-          const Expanded(
-            flex: 1,
-            child: SizedBox(
-              height: 10,
+          // Fundo azul
+          Container(
+            width: double.infinity,
+            height: size.height * 0.6,
+            child: Image.asset(
+              'lib/assets/images/background.png',
+              fit: BoxFit.cover,
             ),
           ),
-          Expanded(
-            flex: 7,
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(25.0, 50.0, 25.0, 20.0),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40.0),
-                  topRight: Radius.circular(40.0),
-                ),
+          // Logo centralizado
+          Positioned(
+            top: size.height * 0.15,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Image.asset(
+                'lib/assets/images/logo.png',
+                width: size.width * 0.5,
+                fit: BoxFit.contain,
               ),
-              child: SingleChildScrollView(
-                child: Form(
-                  key: _formSignInKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Welcome back',
-                        style: TextStyle(
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.w900,
-                          color: lightColorScheme.primary,
-                        ),
+            ),
+          ),
+          // Parte branca com curva
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: ClipPath(
+              clipper: WaveClipper(),
+              child: Container(
+                width: double.infinity,
+                height: size.height * 0.45,
+                color: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end, // força o botão para baixo
+                  children: [
+                    Text(
+                      'Bem-Vindo',
+                      style: TextStyle(
+                        fontFamily: 'Rubik',
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: const Color.fromARGB(186, 0, 0, 0),
                       ),
-                      const SizedBox(
-                        height: 40.0,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Lorem ipsum dolor sit amet consectetur. Lorem id sit',
+                      style: TextStyle(
+                        fontFamily: 'Rubik',
+                        fontSize: 16,
+                        color: Colors.black54,
                       ),
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter Email';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          label: const Text('Email'),
-                          hintText: 'Enter Email',
-                          hintStyle: const TextStyle(
-                            color: Colors.black26,
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 25.0,
-                      ),
-                      TextFormField(
-                        obscureText: true,
-                        obscuringCharacter: '*',
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter Password';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          label: const Text('Password'),
-                          hintText: 'Enter Password',
-                          hintStyle: const TextStyle(
-                            color: Colors.black26,
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
-                            ),
-                            borderRadius: BorderRadius.circular(10),
+                    ),
+                    const SizedBox(height: 24), // espaço pequeno antes do botão
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end, // botão à direita
+                      children: [
+                        SizedBox(
+                          width: 180,
+                          child: WelcomeButton(
+                            buttonText: 'Continue',
+                            onTap: () {},
+                            iconImage: 'lib/assets/images/Icon.png',
+                            textColor: Colors.grey,
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 25.0,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: rememberPassword,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    rememberPassword = value!;
-                                  });
-                                },
-                                activeColor: lightColorScheme.primary,
-                              ),
-                              const Text(
-                                'Remember me',
-                                style: TextStyle(
-                                  color: Colors.black45,
-                                ),
-                              ),
-                            ],
-                          ),
-                          GestureDetector(
-                            child: Text(
-                              'Forget password?',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: lightColorScheme.primary,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 25.0,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_formSignInKey.currentState!.validate() &&
-                                rememberPassword) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Processing Data'),
-                                ),
-                              );
-                            } else if (!rememberPassword) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Please agree to the processing of personal data')),
-                              );
-                            }
-                          },
-                          child: const Text('Sign up'),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 25.0,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              thickness: 0.7,
-                              color: Colors.grey.withOpacity(0.5),
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 0,
-                              horizontal: 10,
-                            ),
-                            child: Text(
-                              'Sign up with',
-                              style: TextStyle(
-                                color: Colors.black45,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              thickness: 0.7,
-                              color: Colors.grey.withOpacity(0.5),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 25.0,
-                      ),
-                     Row(
-  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  children: const [
-    Icon(Bootstrap.facebook),
-    Icon(Bootstrap.twitter),
-    Icon(Bootstrap.google),
-    Icon(Bootstrap.apple),
-  ],
-),
-                      const SizedBox(
-                        height: 25.0,
-                      ),
-                      // don't have an account
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Don\'t have an account? ',
-                            style: TextStyle(
-                              color: Colors.black45,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (e) => const SignUpScreen(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              'Sign up',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: lightColorScheme.primary,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -263,4 +91,30 @@ class _SignInScreenState extends State<SignInScreen> {
       ),
     );
   }
+}
+
+// CLIPPER PARA CURVA INFERIOR
+class WaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    path.lineTo(0, 40);
+    var firstControlPoint = Offset(size.width / 4, 0);
+    var firstEndPoint = Offset(size.width / 2, 40);
+    var secondControlPoint = Offset(3 * size.width / 4, 80);
+    var secondEndPoint = Offset(size.width, 40);
+
+    path.quadraticBezierTo(
+        firstControlPoint.dx, firstControlPoint.dy, firstEndPoint.dx, firstEndPoint.dy);
+    path.quadraticBezierTo(
+        secondControlPoint.dx, secondControlPoint.dy, secondEndPoint.dx, secondEndPoint.dy);
+
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
