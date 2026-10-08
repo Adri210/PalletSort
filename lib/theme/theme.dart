@@ -1,62 +1,106 @@
 import 'package:flutter/material.dart';
 
-const lightColorScheme = ColorScheme(
-  brightness: Brightness.light,
-  primary: Color(0xFF416FDF),
-  onPrimary: Color(0xFFFFFFFF),
-  secondary: Color(0xFF6EAEE7),
-  onSecondary: Color(0xFFFFFFFF),
-  error: Color(0xFFBA1A1A),
-  onError: Color(0xFFFFFFFF),
-  background: Color(0xFFFCFDF6),
-  onBackground: Color(0xFF1A1C18),
-  shadow: Color(0xFF000000),
-  outlineVariant: Color(0xFFC2C8BC),
-  surface: Color(0xFFF9FAF3),
-  onSurface: Color(0xFF1A1C18),
-);
+abstract final class AppColors {
+  static const navy950 = Color(0xFF07111F);
+  static const navy900 = Color(0xFF0B1728);
+  static const navy800 = Color(0xFF12243A);
+  static const slate400 = Color(0xFF94A3B8);
+  static const slate200 = Color(0xFFE2E8F0);
+  static const cyan = Color(0xFF22D3EE);
+  static const cyanDark = Color(0xFF0891B2);
+  static const blue = Color(0xFF3B82F6);
+  static const white = Color(0xFFF8FAFC);
+  static const success = Color(0xFF34D399);
+}
 
-const darkColorScheme = ColorScheme(
-  brightness: Brightness.dark,
-  primary: Color(0xFF416FDF),
-  onPrimary: Color(0xFFFFFFFF),
-  secondary: Color(0xFF6EAEE7),
-  onSecondary: Color(0xFFFFFFFF),
-  error: Color(0xFFBA1A1A),
-  onError: Color(0xFFFFFFFF),
-  background: Color(0xFFFCFDF6),
-  onBackground: Color(0xFF1A1C18),
-  shadow: Color(0xFF000000),
-  outlineVariant: Color(0xFFC2C8BC),
-  surface: Color(0xFFF9FAF3),
-  onSurface: Color(0xFF1A1C18),
-);
+final ThemeData lightMode = _buildTheme(Brightness.light);
+final ThemeData darkMode = _buildTheme(Brightness.dark);
 
-ThemeData lightMode = ThemeData(
-  useMaterial3: true,
-  brightness: Brightness.light,
-  colorScheme: lightColorScheme,
-  elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ButtonStyle(
-      backgroundColor: MaterialStateProperty.all<Color>(
-        lightColorScheme.primary, // Slightly darker shade for the button
+ThemeData _buildTheme(Brightness brightness) {
+  final colorScheme = ColorScheme.fromSeed(
+    seedColor: AppColors.cyan,
+    brightness: brightness,
+    primary: AppColors.cyanDark,
+    secondary: AppColors.blue,
+    surface: brightness == Brightness.dark
+        ? AppColors.navy900
+        : const Color(0xFFF8FAFC),
+  );
+
+  return ThemeData(
+    useMaterial3: true,
+    brightness: brightness,
+    colorScheme: colorScheme,
+    fontFamily: 'Rubik',
+    scaffoldBackgroundColor: AppColors.navy950,
+    textTheme: const TextTheme(
+      displayLarge: TextStyle(
+        fontWeight: FontWeight.w700,
+        letterSpacing: -1.8,
+        height: 1.05,
       ),
-      foregroundColor:
-          MaterialStateProperty.all<Color>(Colors.white), // text color
-      elevation: MaterialStateProperty.all<double>(5.0), // shadow
-      padding: MaterialStateProperty.all<EdgeInsets>(
-          const EdgeInsets.symmetric(horizontal: 20, vertical: 18)),
-      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16), // Adjust as needed
-        ),
+      headlineLarge: TextStyle(
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.8,
+        height: 1.12,
+      ),
+      headlineSmall: TextStyle(
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.3,
+      ),
+      bodyLarge: TextStyle(height: 1.55),
+      bodyMedium: TextStyle(height: 1.5),
+      labelLarge: TextStyle(fontWeight: FontWeight.w700),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: Colors.white.withValues(alpha: 0.055),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+      hintStyle: const TextStyle(color: AppColors.slate400),
+      labelStyle: const TextStyle(color: AppColors.slate200),
+      prefixIconColor: AppColors.slate400,
+      suffixIconColor: AppColors.slate400,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: AppColors.cyan, width: 1.5),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Color(0xFFFB7185)),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Color(0xFFFB7185), width: 1.5),
       ),
     ),
-  ),
-);
-
-ThemeData darkMode = ThemeData(
-  useMaterial3: true,
-  brightness: Brightness.dark,
-  colorScheme: darkColorScheme,
-);
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: AppColors.cyan,
+        textStyle: const TextStyle(fontWeight: FontWeight.w700),
+      ),
+    ),
+    checkboxTheme: CheckboxThemeData(
+      fillColor: WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.selected)
+            ? AppColors.cyanDark
+            : Colors.transparent,
+      ),
+      side: BorderSide(color: Colors.white.withValues(alpha: 0.24)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+    ),
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: AppColors.navy800,
+      contentTextStyle: const TextStyle(color: AppColors.white),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+    ),
+  );
+}

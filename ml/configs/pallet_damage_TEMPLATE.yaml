@@ -1,0 +1,11 @@
+# Use este arquivo somente depois de anotar as avarias.
+# As caixas da classe 0 devem envolver o pallet inteiro.
+# As caixas da classe 1 devem envolver somente a região avariada.
+path: SUBSTITUA_PELO_CAMINHO_ABSOLUTO_DO_DATASET
+train: images/train
+val: images/val
+test: images/test
+
+names:
+  0: pallet
+  1: damage
